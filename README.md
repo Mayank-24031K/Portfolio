@@ -17,3 +17,9 @@ Download them into an `images/` folder and update the paths to make the site ful
 
     css/cursor.css  js/cursor.js     sketched cursor: pencil arrow, ink-doodle trail, hover ring, click burst
                                      (mouse/trackpad only; palette is the COLORS array at the top of cursor.js)
+
+## Responsive updates
+
+The site includes `css/responsive.css`, loaded after the original styles. It adds dedicated tablet and phone layouts, fluid type and spacing, safer wrapping for long project names/chips, a stacked mobile navigation, and compact loader spacing to avoid collisions. No build step is required.
+
+To test, open the page in browser developer tools and check widths around 320, 375, 430, 768, 820, 1024 and 1280 pixels.

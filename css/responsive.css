@@ -1,0 +1,131 @@
+/* Responsive layout and collision fixes for phones, tablets and compact laptops. */
+:root {
+  --gutter: clamp(18px, 4vw, 64px);
+  --nav-height: 64px;
+}
+
+html { scroll-padding-top: 18px; }
+body { min-width: 320px; }
+.site-nav { position: relative; z-index: 60; min-height: var(--nav-height); padding: 12px var(--gutter); }
+.site-nav__links { align-items: center; gap: clamp(14px, 2.4vw, 28px); }
+.site-nav__links a { white-space: nowrap; }
+.hero, .work, .about, .skills, .site-footer { min-width: 0; }
+.hero__title { overflow-wrap: normal; }
+.project__caption, .skills__body, .about { min-width: 0; }
+.project__heading, .project__description, .about__copy, .skills__group { min-width: 0; }
+.project__name { overflow-wrap: anywhere; }
+.project__description { max-width: none; }
+.chips li { max-width: 100%; overflow-wrap: anywhere; }
+
+/* Tablets: remove the fixed desktop collage and use a deliberate two-column layout. */
+@media (min-width: 601px) and (max-width: 1024px) {
+  .hero {
+    height: auto;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: center;
+    justify-items: center;
+    gap: 28px 24px;
+    padding-block: clamp(48px, 8vw, 84px) 64px;
+  }
+  .hero__title { grid-column: 1 / -1; width: 100%; font-size: clamp(76px, 13vw, 132px); line-height: .94; }
+  .hero__note { position: static; grid-column: 1 / -1; order: initial; width: min(620px, 100%); transform: none; font-size: clamp(17px, 2.2vw, 20px); line-height: 1.55; }
+  .scrap, .id-card, .sticker { position: relative; inset: auto; transform: none; }
+  .scrap--interface { grid-column: 1; grid-row: 3; width: min(100%, 360px); aspect-ratio: 16 / 9; }
+  .scrap--generative { grid-column: 2; grid-row: 3; width: min(100%, 300px); aspect-ratio: 12 / 11; }
+  .id-card { grid-column: 1; grid-row: 4; width: min(100%, 230px); min-height: 180px; justify-self: end; }
+  .sticker { grid-column: 2; grid-row: 4; width: min(100%, 230px); height: 112px; justify-self: start; font-size: clamp(18px, 2.2vw, 23px); }
+  .work { gap: 38px; padding-block: 44px 64px; }
+  .project__caption { gap: 22px; }
+  .project__name { font-size: clamp(27px, 3.4vw, 36px); }
+  .project__description { font-size: 17px; line-height: 1.55; }
+  .skills { padding-block: 20px 44px; }
+  .skills__body { gap: 28px; }
+  .chips { gap: 10px; }
+  .chips li { padding: 8px 13px; font-size: 16px; }
+  .about { gap: 36px; padding-block: 32px 64px; }
+  .about__title { font-size: clamp(30px, 4vw, 40px); }
+  .about__text { font-size: 17px; line-height: 1.6; }
+}
+
+/* Phones: stack everything, prevent long labels and nav links from colliding. */
+@media (max-width: 600px) {
+  :root { --gutter: 18px; }
+  .site-nav { gap: 12px; padding: 12px 18px; flex-wrap: wrap; }
+  .site-nav__brand { flex: 0 0 100%; font-size: 17px; }
+  .site-nav__links { width: 100%; justify-content: space-between; gap: 10px; }
+  .site-nav__links a { font-size: 14px; }
+
+  .hero {
+    height: auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 24px;
+    padding: 48px 0 42px;
+  }
+  .hero__title { width: 100%; flex: none; font-size: clamp(54px, 16vw, 92px); letter-spacing: -.055em; line-height: .96; transform: rotate(-2deg); }
+  .hero__note { position: static; order: initial; width: 100%; flex: none; transform: none; font-size: 17px; line-height: 1.55; }
+  .scrap, .id-card, .sticker { position: relative; inset: auto; transform: none; }
+  .scrap--interface { order: initial; width: min(88%, 360px); aspect-ratio: 16 / 9; }
+  .scrap--generative { order: initial; width: min(76%, 290px); aspect-ratio: 12 / 11; }
+  .id-card { order: initial; width: min(76%, 240px); min-height: 174px; align-self: flex-start; margin-left: 4%; gap: 7px; padding: 16px; }
+  .id-card__monogram { font-size: 42px; }
+  .sticker { order: initial; width: min(70%, 230px); height: 104px; align-self: flex-end; margin-right: 3%; padding: 12px; font-size: 19px; }
+
+  .section-title { font-size: clamp(29px, 9vw, 36px); }
+  .work { gap: 34px; padding-block: 34px 48px; }
+  .project { gap: 12px; }
+  .project__caption { flex-direction: column; gap: 10px; }
+  .project__name { font-size: clamp(27px, 8vw, 34px); line-height: 1.12; }
+  .project__meta { font-size: 10px; letter-spacing: 1.4px; }
+  .project__role { font-size: 16px; }
+  .project__description { font-size: 16px; line-height: 1.55; }
+  .project__preview { height: auto; min-height: 0; aspect-ratio: 4 / 3; padding: 8px; }
+  .project__preview img { width: 100%; height: 100%; object-fit: cover; }
+
+  .skills { gap: 24px; padding-block: 18px 42px; }
+  .skills__body { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  .skills__group { gap: 13px; }
+  .chips { gap: 9px; }
+  .chips li { padding: 7px 12px; font-size: 15px; }
+
+  .about { flex-direction: column; gap: 18px; padding-block: 28px 48px; }
+  .about__title { font-size: clamp(29px, 8vw, 35px); line-height: 1.2; }
+  .about__copy { gap: 18px; }
+  .about__text { font-size: 16px; line-height: 1.6; }
+  .about__tools { font-size: 11px; letter-spacing: 1.3px; line-height: 1.7; }
+
+  .site-footer { align-items: center; text-align: center; padding-block: 24px 28px; gap: 12px; }
+  .socials { gap: 14px; padding-block: 4px 14px; }
+  .socials__title { font-size: 20px; }
+  .socials__list { gap: 10px; }
+  .social-btn { padding: 10px 13px; font-size: 15px; }
+}
+
+@media (max-width: 360px) {
+  .site-nav__links { gap: 7px; }
+  .site-nav__links a { font-size: 13px; }
+  .hero__title { font-size: clamp(48px, 15.5vw, 58px); }
+  .id-card { width: 82%; }
+  .sticker { width: 76%; }
+  .social-btn { gap: 7px; padding-inline: 10px; }
+}
+
+/* Small loader header/footer labels should never collide on narrow screens. */
+@media (max-width: 520px) {
+  .loader__brand, .loader__tagline { top: 18px; font-size: 10px; }
+  .loader__brand { left: 16px; }
+  .loader__tagline { right: 16px; max-width: 48%; text-align: right; }
+  .loader__credit { left: 16px; bottom: 18px; max-width: 52%; font-size: 9px; }
+  .loader__skip { left: auto; right: 16px; bottom: 12px; font-size: 11px; }
+  .loader__count { right: 14px; bottom: 48px; font-size: clamp(52px, 17vw, 82px); }
+  .loader__art { width: min(360px, 84vw); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__title { transform: none; }
+}
