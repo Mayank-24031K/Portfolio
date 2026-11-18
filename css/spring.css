@@ -1,0 +1,57 @@
+/* Doodle spring — fixed to the right edge, stretches with scroll (see js/spring.js) */
+.spring {
+    position: fixed;
+    right: 6px;
+    top: calc(var(--nav-height) + 16px);
+    bottom: 16px;
+    width: 64px;
+    z-index: 5;
+    pointer-events: none;
+    display: none;
+}
+
+.spring svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+.spring__hook {
+    fill: none;
+    stroke: var(--color-ink);
+    stroke-width: 1.8px;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.spring__coil {
+    fill: none;
+    stroke: var(--color-accent);
+    stroke-width: 2px;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.spring__weight circle.spring__body {
+    fill: var(--color-paper);
+    stroke: var(--color-ink);
+    stroke-width: 1.8px;
+}
+
+.spring__face {
+    fill: none;
+    stroke: var(--color-ink);
+    stroke-width: 1.6px;
+    stroke-linecap: round;
+}
+
+.spring__eye { fill: var(--color-ink); stroke: none; }
+
+/* Only where the right margin is wide enough not to crowd the content */
+@media (min-width: 1000px) {
+    .spring { display: block; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .spring { opacity: 0.8; }
+}

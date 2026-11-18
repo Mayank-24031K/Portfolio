@@ -1,0 +1,266 @@
+/*
+ * Sketch loading screen — shared by every page (see js/loader.js).
+ * A boy on a cloud with his laptop, falling: speed lines and doodles rush upward past him.
+ * Needs css/tokens.css loaded first.
+ */
+
+/* While loading: hide the page itself so nothing flashes behind the loader. */
+html.is-loading {
+    background: var(--sketch-paper, #f7f5ee);
+    overflow: hidden;
+}
+
+    html.is-loading body {
+        visibility: hidden;
+    }
+
+    html.is-loading .loader {
+        visibility: visible;
+    }
+
+.loader {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    overflow: hidden;
+    background: var(--sketch-paper, #f7f5ee);
+    color: var(--sketch-ink, #343631);
+    font-family: var(--font-sketch, Georgia, serif);
+    opacity: 1;
+    transition: opacity 0.7s ease, visibility 0.7s;
+}
+
+    .loader[hidden] {
+        display: none;
+    }
+
+    .loader.is-leaving {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+    }
+
+/* Paper grain */
+.loader__grain {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.16;
+    pointer-events: none;
+}
+
+.loader__brand,
+.loader__tagline,
+.loader__credit {
+    position: absolute;
+    margin: 0;
+    font-size: 13px;
+}
+
+.loader__brand {
+    top: 28px;
+    left: 32px;
+    letter-spacing: 2px;
+}
+
+.loader__tagline {
+    top: 28px;
+    right: 32px;
+    font-style: italic;
+}
+
+.loader__credit {
+    bottom: 30px;
+    left: 32px;
+    font-size: 11px;
+    opacity: 0.55;
+}
+
+.loader__skip {
+    position: absolute;
+    left: 32px;
+    bottom: 24px;
+    padding: 8px 0;
+    border: 0;
+    border-bottom: 1px solid currentColor;
+    background: none;
+    color: inherit;
+    font: 13px var(--font-sketch, Georgia, serif);
+    cursor: pointer;
+}
+
+    .loader__skip:focus-visible {
+        outline: 2px dashed currentColor;
+        outline-offset: 6px;
+    }
+
+/* ---- Falling lines + doodles (built by js/loader.js) ---- */
+.loader__fall {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.loader__streak {
+    position: absolute;
+    top: 0;
+    width: 1.5px;
+    height: var(--h, 100px);
+    border-radius: 2px;
+    background: linear-gradient(to bottom, transparent, var(--sketch-ink, #343631));
+    animation: loader-rise var(--dur, 1s) linear infinite;
+}
+
+.loader__doodle {
+    position: absolute;
+    top: 0;
+    width: var(--s, 40px);
+    height: var(--s, 40px);
+    color: var(--sketch-ink, #343631);
+    opacity: 0.45;
+    animation: loader-rise var(--dur, 2s) linear infinite;
+}
+
+    .loader__doodle svg {
+        display: block;
+        width: 100%;
+        height: 100%;
+        animation: loader-spin calc(var(--dur, 2s) * 1.6) linear infinite;
+    }
+
+@keyframes loader-rise {
+    from { transform: translateY(110vh); }
+    to   { transform: translateY(-220px); }
+}
+
+@keyframes loader-spin {
+    to { transform: rotate(var(--rot, 180deg)); }
+}
+
+/* ---- Figure on a cloud ---- */
+.loader__center {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.7s ease;
+}
+
+.loader.is-leaving .loader__center {
+    transform: translateY(-24px);
+}
+
+.loader__art {
+    width: min(460px, 80vw);
+    height: auto;
+    overflow: visible;
+    /* falling: tumbling and shaking in the wind */
+    animation: loader-fall 0.9s ease-in-out infinite alternate;
+}
+
+.loader__art .line, .loader__art .tube-o, .loader__art .tube-i,
+.loader__art .cloud__edge * {
+    stroke: var(--sketch-ink, #343631);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.loader__art .line { fill: var(--sketch-paper, #f7f5ee); stroke-width: 2; }
+.loader__art .line.thin { fill: none; stroke-width: 1.8; }
+.loader__art .ink { fill: var(--sketch-ink, #343631); stroke: none; }
+.loader__art .hatch { fill: none; stroke: var(--sketch-ink, #343631); stroke-width: 1.2; opacity: .4; stroke-linecap: round; }
+
+/* Limbs: a thick ink stroke with a slightly thinner paper stroke on top = outlined tube */
+.loader__art .tube-o { fill: none; stroke-width: 28.5; }
+.loader__art .tube-i { fill: none; stroke: var(--sketch-paper, #f7f5ee); stroke-width: 25.5; }
+
+/* Cloud: stroked shapes underneath, paper-filled copies on top hide the inner lines */
+.loader__art .cloud__edge * { fill: var(--sketch-paper, #f7f5ee); stroke-width: 4; }
+.loader__art .cloud__fill * { fill: var(--sketch-paper, #f7f5ee); stroke: none; }
+
+.art__kick {
+    transform-origin: 132px 192px;
+    animation: loader-kick 0.45s ease-in-out infinite alternate;
+}
+
+@keyframes loader-fall {
+    0%   { transform: translate(-3px, 2px) rotate(-3deg); }
+    35%  { transform: translate(3px, -3px) rotate(2deg); }
+    70%  { transform: translate(-2px, -5px) rotate(-1.5deg); }
+    100% { transform: translate(4px, 1px) rotate(3deg); }
+}
+@keyframes loader-kick { from { transform: rotate(-12deg); } to { transform: rotate(14deg); } }
+
+.loader__label {
+    margin: 6px 0 0;
+    font-size: 14px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+}
+
+/* Three dots that "type" while loading */
+.loader__dots::after {
+    content: "";
+    display: inline-block;
+    width: 1.2em;
+    text-align: left;
+    animation: loader-dots 1.2s steps(4, end) infinite;
+}
+
+@keyframes loader-dots {
+    0% { content: ""; }
+    25% { content: "."; }
+    50% { content: ".."; }
+    75% { content: "..."; }
+}
+
+/* Big counter + hand-drawn progress line */
+.loader__count {
+    position: absolute;
+    right: 28px;
+    bottom: 40px;
+    font-size: clamp(64px, 12vw, 130px);
+    line-height: 1;
+    font-style: italic;
+    color: var(--sketch-ink, #343631);
+    opacity: 0.22;
+    font-variant-numeric: tabular-nums;
+}
+
+.loader__bar {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 3px;
+    background: rgba(52, 54, 49, 0.12);
+}
+
+    .loader__bar span {
+        display: block;
+        height: 100%;
+        width: 0;
+        background: var(--sketch-ink, #343631);
+    }
+
+@media (prefers-reduced-motion: reduce) {
+    .loader, .loader__center {
+        transition-duration: 0.01s;
+        transition-delay: 0s;
+    }
+
+    .loader__art, .art__kick, .loader__fall {
+        animation: none;
+    }
+
+    .loader__fall { display: none; }
+
+    .loader__dots::after {
+        animation: none;
+        content: "...";
+    }
+}

@@ -1,0 +1,354 @@
+/*
+ * Sketch theme for the main page — matches the loading screen:
+ * warm paper, one ink colour, Georgia, wobbly hand-drawn outlines, doodles.
+ * Loaded after the other page styles, so it only overrides what it must.
+ * Colours live in css/tokens.css.
+ */
+
+/* Paper grain over the whole page */
+body {
+    position: relative;
+    font-size: 16px;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    pointer-events: none;
+    opacity: 0.18;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='.5'/></svg>");
+}
+
+::selection {
+    background: var(--color-accent);
+    color: var(--color-paper);
+}
+
+/* ---- Nav ---- */
+.site-nav {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    border-bottom: 1.5px solid var(--color-ink);
+    border-radius: 0 0 6px 40px / 0 0 3px 14px;
+}
+
+.site-nav__brand {
+    letter-spacing: 2px;
+    font-size: 18px;
+    font-weight: 400;
+}
+
+.site-nav__links a {
+    font-style: italic;
+}
+
+.site-nav :focus-visible { outline-color: var(--color-ink); }
+
+/* ---- Hero ---- */
+/* Name: two stacked lines in a glitchy, sliced display style (see #glitch-type in index.html) */
+.hero__title {
+    font-family: "Arial Black", "Helvetica Neue", Arial, sans-serif;
+    font-size: clamp(46px, 11.5vw, 260px);
+    font-weight: 900;
+    font-style: normal;
+    letter-spacing: -0.02em;
+    line-height: 0.98;
+    transform: rotate(-3deg);
+    position: relative;
+    z-index: 1;
+}
+
+.hero__first,
+.hero__last {
+    display: block;
+    filter: url(#glitch-type);
+}
+
+.hero__first { color: var(--color-accent); }
+.hero__last  { color: var(--color-ink); }
+
+.hero__note {
+    font-size: 19px;
+    font-style: italic;
+    color: var(--color-ink);
+}
+
+/* Photos become taped-down sketches */
+.scrap {
+    padding: 8px 8px 8px;
+    background: var(--color-paper);
+    border: 1.5px solid var(--color-ink);
+    border-radius: var(--sketch-radius);
+    box-shadow: 4px 5px 0 rgba(52, 54, 49, 0.14);
+    overflow: visible;
+}
+
+.scrap::before {
+    /* tape */
+    content: "";
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    width: 70px;
+    height: 22px;
+    margin-left: -35px;
+    background: rgba(52, 54, 49, 0.12);
+    border: 1px dashed rgba(52, 54, 49, 0.45);
+    transform: rotate(-4deg);
+    z-index: 2;
+}
+
+.scrap img,
+.project__preview img {
+    filter: grayscale(0.55) contrast(1.05);
+    mix-blend-mode: multiply;
+}
+
+.scrap img {
+    border-radius: 2px;
+}
+
+.scrap--generative img {
+    object-position: 55% 30%;
+    filter: none;
+}
+
+.id-card {
+    background: var(--color-sage);
+    color: var(--color-ink);
+    border: 1.5px solid var(--color-ink);
+    border-radius: var(--sketch-radius);
+    box-shadow: 4px 5px 0 rgba(52, 54, 49, 0.14);
+}
+
+.id-card__label {
+    font-size: 10px;
+    letter-spacing: 2px;
+}
+
+.id-card__monogram {
+    font-size: 38px;
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+}
+
+.id-card__note {
+    font-size: 12px;
+    font-style: italic;
+}
+
+.sticker {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    border: 1.5px solid var(--color-ink);
+    border-radius: 50% 48% 52% 46% / 56% 50% 50% 46%;
+    outline: 1px solid rgba(52, 54, 49, 0.4);
+    outline-offset: 4px;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 20px;
+}
+
+/* ---- Doodles ----
+ * Each section gets a viewport-wide layer, so they also fill the margins of wide screens.
+ * Positions are % of the screen; blue ones (.b) use the accent colour. */
+html { overflow-x: clip; }
+body { overflow-x: clip; }
+
+.hero, .work, .about { position: relative; }
+
+.doodles {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: calc(100vw - 140px); /* stops short of the right edge so doodles stay clear of the spring */
+    margin-left: -50vw;
+    pointer-events: none;
+    color: var(--color-ink);
+    z-index: 0;
+}
+
+.doodle {
+    position: absolute;
+    height: auto;
+    overflow: visible;
+    opacity: 0.55;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8px;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.doodle path { vector-effect: non-scaling-stroke; }
+
+.doodle.b {
+    color: var(--color-accent);
+    opacity: 0.85;
+}
+
+.work > :not(.doodles), .about > :not(.doodles) { position: relative; z-index: 1; }
+
+/* ---- Sections ---- */
+.section-title {
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+}
+
+.work .section-title {
+    align-self: flex-start;
+    padding-bottom: 8px;
+    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 10' preserveAspectRatio='none'><path d='M2 6 Q70 1 140 6 T298 5' fill='none' stroke='%232563e0' stroke-width='2.8' stroke-linecap='round'/></svg>") bottom / 100% 8px no-repeat;
+}
+
+.project__preview {
+    padding: 10px;
+    border: 1.5px solid var(--color-ink);
+    border-radius: var(--sketch-radius);
+    box-shadow: 5px 6px 0 rgba(52, 54, 49, 0.12);
+    background: var(--color-sage);
+}
+
+.project__preview img {
+    border-radius: 2px;
+}
+
+.project__meta {
+    font-size: 12px;
+    letter-spacing: 2px;
+}
+
+.project__name,
+.about__title {
+    font-weight: 400;
+    font-style: italic;
+}
+
+.project__description,
+.about__text {
+    font-size: 18px;
+    line-height: 28px;
+    color: var(--color-muted);
+}
+
+.about__tools {
+    padding-top: 14px;
+    border-top: 1.5px dashed var(--color-ink);
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+/* ---- Footer ---- */
+.site-footer {
+    border-top: 1.5px dashed var(--color-ink);
+    font-style: italic;
+    font-size: 14px;
+}
+
+/* ---- Small screens ---- */
+@media (max-width: 860px) {
+    .doodles { display: none; }
+    .scrap { overflow: visible; }
+}
+
+@media (max-width: 600px) {
+    .hero__title { font-size: clamp(40px, 15vw, 80px); }
+}
+
+/* ---- Blue accents (same blue as "MAYANK") ---- */
+.site-nav { border-bottom-color: var(--color-accent); }
+.site-nav__brand { color: var(--color-accent); font-weight: 700; }
+.site-nav__links a:hover,
+.site-nav__links a[aria-current="true"] { color: var(--color-accent); }
+
+.scrap, .id-card, .project__preview {
+    box-shadow: 5px 6px 0 var(--color-accent-soft);
+}
+.scrap::before { background: var(--color-accent-soft); border-color: rgba(37, 99, 224, 0.5); }
+
+.id-card__monogram { color: var(--color-accent); }
+.id-card__label { color: var(--color-accent); }
+
+.sticker {
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+    outline-color: rgba(37, 99, 224, 0.45);
+}
+
+.section-title { color: var(--color-accent); }
+.project__meta { color: var(--color-accent); }
+.project__name:hover { color: var(--color-accent); }
+.about__title { text-decoration: underline wavy var(--color-accent); text-decoration-thickness: 1.5px; text-underline-offset: 8px; text-decoration-skip-ink: none; }
+.about__tools { border-top-color: var(--color-accent); color: var(--color-accent); }
+.site-footer { border-top-color: var(--color-accent); }
+
+/* ---- Wide screens: projects sit side by side ---- */
+@media (min-width: 1100px) {
+    .work { display: grid; grid-template-columns: 1fr 1fr; column-gap: clamp(40px, 4vw, 90px); row-gap: 56px; }
+    .work .section-title { grid-column: 1 / -1; }
+    .project__preview { height: clamp(260px, 26vw, 620px); }
+    .project__caption { flex-direction: column; gap: 10px; }
+    .project__description { max-width: none; font-size: clamp(18px, 1.1vw, 24px); line-height: 1.55; }
+    .project__name { font-size: clamp(38px, 2.6vw, 64px); }
+    .about { gap: clamp(64px, 6vw, 160px); }
+    .about__title { font-size: clamp(38px, 2.8vw, 70px); }
+    .about__text { font-size: clamp(18px, 1.25vw, 26px); line-height: 1.55; }
+}
+@media (min-width: 1700px) {
+    .hero__note { font-size: 24px; line-height: 34px; width: min(760px, 100%); }
+    .section-title { font-size: 52px; }
+    .site-footer { font-size: 17px; }
+}
+
+@media (min-width: 1150px) {
+    .hero__title { font-size: min(7.6vw, 230px); }
+    .id-card { gap: 12px; padding: clamp(16px, 1.2vw, 30px); }
+    .id-card__monogram { font-size: clamp(38px, 2.6vw, 72px); }
+    .id-card__label { font-size: clamp(10px, 0.7vw, 15px); }
+    .id-card__note { font-size: clamp(12px, 0.9vw, 19px); }
+    .sticker { font-size: clamp(20px, 1.4vw, 32px); }
+}
+
+/* Section doodles live in the side margins, so only show them where the margins are wide enough */
+@media (max-width: 1699px) {
+    .work > .doodles,
+    .about > .doodles { display: none; }
+}
+
+/* ---- Compact desktop: keep the page from stretching on big screens ---- */
+.hero { height: clamp(760px, 40vw, 820px); }
+.scrap--interface  { width: clamp(250px, 19vw, 360px); }
+.scrap--generative { width: clamp(220px, 17vw, 320px); }
+.id-card { width: clamp(160px, 11vw, 200px); min-height: clamp(160px, 11vw, 200px); }
+.sticker { width: clamp(190px, 13vw, 240px); height: clamp(90px, 6vw, 112px); }
+
+@media (min-width: 1100px) {
+    .work { column-gap: clamp(40px, 4vw, 64px); }
+    .project__preview { height: clamp(260px, 24vw, 400px); }
+    .project__name { font-size: clamp(34px, 2.3vw, 44px); }
+    .project__description { font-size: clamp(17px, 1.1vw, 19px); }
+    .about { gap: clamp(48px, 5vw, 80px); }
+    .about__title { font-size: clamp(34px, 2.5vw, 46px); }
+    .about__text { font-size: clamp(17px, 1.2vw, 20px); }
+}
+
+@media (min-width: 1150px) {
+    .hero__title { font-size: min(7.6vw, 150px); }
+    .id-card__monogram { font-size: clamp(34px, 2.4vw, 48px); }
+    .id-card__label { font-size: clamp(10px, 0.7vw, 12px); }
+    .id-card__note { font-size: clamp(12px, 0.9vw, 14px); }
+    .sticker { font-size: clamp(18px, 1.3vw, 24px); }
+}
+
+@media (min-width: 1700px) {
+    .hero__note { font-size: 21px; line-height: 30px; width: min(640px, 100%); }
+    .section-title { font-size: 44px; }
+    .site-footer { font-size: 15px; }
+}

@@ -1,0 +1,42 @@
+.about {
+    display: flex;
+    gap: 64px;
+    padding-block: 40px 80px;
+    scroll-margin-top: 16px;
+}
+
+.about__label {
+    flex: 1;
+}
+
+.about__copy {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.about__title {
+    color: var(--color-blue);
+    font-size: 38px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+}
+
+.about__text {
+    font-size: 20px;
+    line-height: 29px;
+}
+
+@media (max-width: 760px) {
+    .about {
+        flex-direction: column;
+        gap: 20px;
+        padding-bottom: 56px;
+    }
+
+    .about__title {
+        font-size: 32px;
+    }
+}

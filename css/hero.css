@@ -1,0 +1,164 @@
+/*
+ * Hero — a loose "desk" of rotated scraps around a big tilted title.
+ * Desktop: items are placed with % / px against a 1016 x 780 stage.
+ * Mobile: the stage collapses into a centred, wrapping flow.
+ */
+.hero {
+    position: relative;
+    height: clamp(780px, 41vw, 1060px);
+    display: grid;
+    place-items: center;
+}
+
+.hero__title {
+    width: 100%;
+    color: var(--color-blue);
+    font-size: clamp(64px, 13.4vw, 136px);
+    font-weight: 800;
+    letter-spacing: -0.045em;
+    line-height: 1;
+    text-align: center;
+    transform: rotate(-6deg);
+}
+
+.hero__note {
+    position: absolute;
+    left: 50%;
+    top: 88%;
+    width: min(620px, 100%);
+    transform: translateX(-50%);
+    font-size: 20px;
+    line-height: 29px;
+    text-align: center;
+}
+
+/* Photo scraps */
+.scrap {
+    position: absolute;
+    overflow: hidden;
+}
+
+    .scrap img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+.scrap--interface {
+    left: 9%;
+    top: 13%;
+    width: clamp(270px, 21vw, 520px);
+    aspect-ratio: 16 / 9;
+    height: auto;
+    transform: rotate(-11deg);
+}
+
+.scrap--generative {
+    left: 69%;
+    top: 10%;
+    width: clamp(240px, 19vw, 470px);
+    aspect-ratio: 12 / 11;
+    height: auto;
+    border-radius: 2px;
+    transform: rotate(9deg);
+}
+
+/* Badge */
+.id-card {
+    position: absolute;
+    left: 11%;
+    top: 62%;
+    width: clamp(170px, 12vw, 300px);
+    height: auto;
+    min-height: clamp(170px, 12vw, 300px);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px;
+    background: var(--color-sage);
+    transform: rotate(-8deg);
+}
+
+.id-card__monogram {
+    color: var(--color-ink);
+    font-size: 56px;
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+/* Round sticker */
+.sticker {
+    position: absolute;
+    left: 72%;
+    top: 68%;
+    width: clamp(205px, 14vw, 340px);
+    height: clamp(95px, 6.5vw, 160px);
+    display: grid;
+    place-items: center;
+    padding: 16px;
+    border-radius: 50%;
+    background: var(--color-blue);
+    color: var(--color-white);
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.2;
+    text-align: center;
+    transform: rotate(11deg);
+}
+
+/* ---- Tablet / mobile: collapse the desk into a flow ---- */
+@media (max-width: 860px) {
+    .hero {
+        height: auto;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 40px 28px;
+        padding: 72px 0 56px;
+    }
+
+    .hero__title {
+        flex-basis: 100%;
+    }
+
+    .hero__note,
+    .scrap,
+    .id-card,
+    .sticker {
+        position: static;
+        transform: none;
+    }
+
+    .hero__note {
+        order: 2;
+        flex-basis: 100%;
+        width: min(520px, 100%);
+    }
+
+    .scrap--interface {
+        order: 3;
+        width: min(270px, 42%);
+        height: auto;
+        aspect-ratio: 16 / 9;
+        transform: rotate(-5deg);
+    }
+
+    .scrap--generative {
+        order: 4;
+        width: min(240px, 42%);
+        height: auto;
+        aspect-ratio: 12 / 11;
+        transform: rotate(4deg);
+    }
+
+    .id-card {
+        order: 5;
+        transform: rotate(-4deg);
+    }
+
+    .sticker {
+        order: 6;
+        transform: rotate(5deg);
+    }
+}

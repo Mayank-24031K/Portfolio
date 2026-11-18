@@ -1,0 +1,27 @@
+/* Design tokens — the one place to change colours, type and sizing. */
+:root {
+    /* Site palette */
+    /* Sketch theme: the whole site shares the loading screen's paper + ink.
+       (--color-blue is kept as a name for "accent"; it is now the ink colour.) */
+    --color-paper: #f7f5ee;
+    --color-blue: #343631;
+    --color-ink: #343631;
+    --color-muted: #5d5f57;
+    --color-sage: #ebeee8;
+    --color-white: #f7f5ee;
+    --color-line: #343631;
+    --color-accent: #2563e0; /* the blue of "MAYANK" */
+    --color-accent-soft: rgba(37, 99, 224, 0.14);
+    /* Intro (sketchbook) palette */
+    --sketch-paper: #f7f5ee;
+    --sketch-ink: #343631;
+    --sketch-screen: #ebeee8;
+    /* Type */
+    --font-display: Georgia, "Times New Roman", serif;
+    --font-sketch: Georgia, "Times New Roman", serif;
+    --sketch-radius: 255px 14px 225px 14px / 14px 225px 14px 255px;
+    /* Layout */
+    --content-width: 1480px; /* page column — lower = more compact */
+    --gutter: clamp(24px, 4.5vw, 110px);
+    --nav-height: 60px;
+}

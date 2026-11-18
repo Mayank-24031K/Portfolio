@@ -1,0 +1,176 @@
+/*
+ * 
+ * The stage is drawn on a fixed 1000 x 760 canvas and scaled to fit
+ * the viewport by js/intro.js (it sets --scale).
+ */
+.intro {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  overflow: hidden;
+  background: var(--sketch-paper);
+  color: var(--sketch-ink);
+  font-family: var(--font-sketch);
+  transition: opacity 0.7s ease, visibility 0.7s;
+}
+.intro-pending .intro { display: block; }
+.intro.is-leaving { opacity: 0; visibility: hidden; pointer-events: none; }
+
+body.intro-open { overflow: hidden; }
+
+/* Paper grain */
+.intro__grain {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.16;
+  pointer-events: none;
+}
+
+.intro__brand,
+.intro__tagline,
+.intro__credit {
+  position: absolute;
+  font-size: 13px;
+}
+.intro__brand   { top: 28px; left: 32px; letter-spacing: 2px; }
+.intro__tagline { top: 28px; right: 32px; font-style: italic; }
+.intro__credit  { bottom: 30px; left: 32px; font-size: 11px; opacity: 0.55; }
+
+.intro__skip {
+  position: absolute;
+  right: 28px;
+  bottom: 24px;
+  padding: 8px 0;
+  border: 0;
+  border-bottom: 1px solid currentColor;
+  background: none;
+  color: inherit;
+  font: 13px var(--font-sketch);
+  cursor: pointer;
+}
+.intro:focus { outline: none; }
+.intro :focus-visible { outline: 2px dashed var(--sketch-ink); outline-offset: 6px; }
+
+/* ---- Stage ---- */
+.intro__stage {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 1000px;
+  height: 760px;
+  transform: translate(-50%, -50%) scale(var(--scale, 1));
+}
+
+.intro__desk,
+.intro__arrow {
+  position: absolute;
+  fill: none;
+  stroke: var(--sketch-ink);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+.intro__desk  { inset: 0; width: 1000px; height: 760px; }
+.intro__arrow { left: 650px; top: 538px; width: 100px; height: 55px; }
+
+/* ---- Laptop ---- */
+.laptop {
+  position: absolute;
+  left: 335px;
+  top: 276px;
+  width: 330px;
+  height: 246px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  perspective: 900px;
+}
+
+.laptop__base {
+  position: absolute;
+  left: 0;
+  top: 146px;
+  width: 330px;
+  height: 100px;
+  fill: none;
+  stroke: var(--sketch-ink);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* The lid hinges on its bottom edge: closed (folded back) -> open (upright). */
+.laptop__lid {
+  position: absolute;
+  left: 26px;
+  top: -28px;
+  width: 278px;
+  height: 191px;
+  border: 1.5px solid var(--sketch-ink);
+  border-top-width: 2px;
+  border-radius: 7px 6px 2px 3px;
+  background: var(--sketch-paper);
+  box-shadow: 1px -2px 0 1px var(--sketch-paper);
+  transform-origin: 50% 100%;
+  transform: rotateX(112deg);
+  backface-visibility: hidden;
+  transition: transform 0.9s cubic-bezier(0.3, 0.7, 0.2, 1);
+}
+.laptop:hover .laptop__lid,
+.laptop:focus-visible .laptop__lid { transform: rotateX(100deg); }
+.laptop.is-open .laptop__lid { transform: rotateX(0deg); }
+
+.laptop__screen {
+  position: absolute;
+  inset: 12px 12px 15px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-top: 1px solid var(--sketch-ink);
+  background: var(--sketch-screen);
+}
+
+.laptop__content {
+  display: block;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.5s ease 0.5s;
+}
+.laptop.is-open .laptop__content { opacity: 1; }
+
+.laptop__hello { display: block; margin-bottom: 12px; font-size: 12px; }
+.laptop__title { display: block; font-size: 31px; line-height: 31px; }
+.laptop__tags  { display: block; margin-top: 14px; font-size: 8px; letter-spacing: 2px; }
+
+.laptop__camera {
+  position: absolute;
+  left: 50%;
+  top: 4px;
+  width: 3px;
+  height: 3px;
+  margin-left: -1.5px;
+  border-radius: 50%;
+  background: var(--sketch-ink);
+}
+
+/* ---- Caption under the laptop ---- */
+.intro__caption {
+  position: absolute;
+  left: 300px;
+  top: 610px;
+  width: 400px;
+  text-align: center;
+}
+.intro__caption-title { margin: 22px 0 12px; font-size: 20px; }
+.intro__caption-hint  { font-size: 9.5px; letter-spacing: 2px; text-transform: uppercase; }
+
+@media (prefers-reduced-motion: reduce) {
+  .intro, .laptop__lid, .laptop__content { transition-duration: 0.01s; transition-delay: 0s; }
+}

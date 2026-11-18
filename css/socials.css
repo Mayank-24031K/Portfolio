@@ -1,0 +1,124 @@
+/* Social buttons in the footer — sketchy pills that wobble, tilt and pop */
+.site-footer { flex-wrap: wrap; align-items: center; }
+
+.socials {
+    flex-basis: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding-block: 8px 24px;
+}
+
+.socials__title {
+    font-size: 22px;
+    font-style: italic;
+    color: var(--color-accent);
+    text-decoration: underline wavy var(--color-accent);
+    text-decoration-thickness: 1.5px;
+    text-underline-offset: 8px;
+    text-decoration-skip-ink: none;
+}
+
+.socials__list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 14px 16px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.social-btn {
+    --tilt: 0deg;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 20px 11px 16px;
+    color: var(--color-ink);
+    background: var(--color-paper);
+    border: 1.5px solid var(--color-ink);
+    border-radius: var(--sketch-radius);
+    box-shadow: 4px 5px 0 var(--color-accent-soft);
+    font: italic 16px/1 var(--font-display);
+    text-decoration: none;
+    cursor: pointer;
+    transform: translate(var(--mx, 0px), var(--my, 0px)) rotate(var(--tilt));
+    transition: transform .18s ease-out, box-shadow .18s, background .18s, color .18s, border-color .18s;
+}
+
+.socials__list li:nth-child(odd)  .social-btn { --tilt: -2deg; }
+.socials__list li:nth-child(even) .social-btn { --tilt: 1.5deg; }
+
+.social-btn svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: transform .3s cubic-bezier(.3, 1.6, .5, 1);
+}
+
+.social-btn:hover,
+.social-btn:focus-visible {
+    --tilt: 0deg;
+    color: var(--color-paper);
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    box-shadow: 7px 8px 0 var(--color-accent-soft);
+    outline: none;
+}
+
+.social-btn:hover svg,
+.social-btn:focus-visible svg { transform: rotate(-12deg) scale(1.2); }
+
+.social-btn:active {
+    box-shadow: 1px 2px 0 var(--color-accent-soft);
+    transform: translate(3px, 3px) rotate(0deg) scale(.97);
+}
+
+.social-btn:focus-visible { outline: 2px dashed var(--color-ink); outline-offset: 4px; }
+
+/* little stars that fly out on click */
+.social-btn__spark {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    color: var(--color-accent);
+    font-size: 14px;
+    pointer-events: none;
+    animation: spark .7s ease-out forwards;
+}
+
+@keyframes spark {
+    from { transform: translate(-50%, -50%) scale(.4); opacity: 1; }
+    to   { transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(1.2) rotate(120deg); opacity: 0; }
+}
+
+/* "Copied!" bubble for the email button */
+.social-btn__tip {
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 10px);
+    padding: 4px 10px;
+    white-space: nowrap;
+    font-size: 13px;
+    color: var(--color-paper);
+    background: var(--color-ink);
+    border-radius: 12px;
+    opacity: 0;
+    transform: translate(-50%, 6px);
+    transition: opacity .2s, transform .2s;
+    pointer-events: none;
+}
+
+.social-btn__tip.show { opacity: 1; transform: translate(-50%, 0); }
+
+@media (prefers-reduced-motion: reduce) {
+    .social-btn, .social-btn svg { transition: none; }
+    .social-btn__spark { display: none; }
+}
