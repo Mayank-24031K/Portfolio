@@ -46,7 +46,8 @@
     text-decoration: none;
     cursor: pointer;
     transform: translate(var(--mx, 0px), var(--my, 0px)) rotate(var(--tilt));
-    transition: transform .18s ease-out, box-shadow .18s, background .18s, color .18s, border-color .18s;
+    scale: 1;
+    transition: transform .18s ease-out, scale .35s cubic-bezier(.34, 1.56, .64, 1), box-shadow .18s, background .18s, color .18s, border-color .18s;
 }
 
 .socials__list li:nth-child(odd)  .social-btn { --tilt: -2deg; }
@@ -70,6 +71,8 @@
     background: var(--color-accent);
     border-color: var(--color-accent);
     box-shadow: 7px 8px 0 var(--color-accent-soft);
+    scale: 1.15;            /* enlarge on hover / keyboard focus */
+    z-index: 2;
     outline: none;
 }
 
@@ -120,5 +123,6 @@
 
 @media (prefers-reduced-motion: reduce) {
     .social-btn, .social-btn svg { transition: none; }
+    .social-btn:hover, .social-btn:focus-visible { scale: 1.05; }
     .social-btn__spark { display: none; }
 }

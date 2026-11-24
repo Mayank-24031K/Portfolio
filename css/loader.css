@@ -25,7 +25,7 @@ html.is-loading {
     overflow: hidden;
     background: var(--sketch-paper, #f7f5ee);
     color: var(--sketch-ink, #343631);
-    font-family: var(--font-sketch, Georgia, serif);
+    font-family: var(--font-sketch, Georgia, Gelasio, serif);
     opacity: 1;
     transition: opacity 0.7s ease, visibility 0.7s;
 }

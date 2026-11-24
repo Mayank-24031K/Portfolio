@@ -17,8 +17,8 @@
     --sketch-ink: #343631;
     --sketch-screen: #ebeee8;
     /* Type */
-    --font-display: Georgia, "Times New Roman", serif;
-    --font-sketch: Georgia, "Times New Roman", serif;
+    --font-display: Georgia, Gelasio, "Times New Roman", serif;
+    --font-sketch: Georgia, Gelasio, "Times New Roman", serif;
     --sketch-radius: 255px 14px 225px 14px / 14px 225px 14px 255px;
     /* Layout */
     --content-width: 1480px; /* page column — lower = more compact */

@@ -23,3 +23,10 @@ Download them into an `images/` folder and update the paths to make the site ful
 The site includes `css/responsive.css`, loaded after the original styles. It adds dedicated tablet and phone layouts, fluid type and spacing, safer wrapping for long project names/chips, a stacked mobile navigation, and compact loader spacing to avoid collisions. No build step is required.
 
 To test, open the page in browser developer tools and check widths around 320, 375, 430, 768, 820, 1024 and 1280 pixels.
+
+## Doodles & fonts update
+
+- `css/doodles.css` + `js/doodles.js`: all 49 background doodles now show on every screen size (they were hidden on tablets/phones and below 1700px for the Work/About sections). Sizes scale per breakpoint (`--ds`), and each doodle is kept inside the screen.
+- Every doodle is animated (float, drift, sway, spin, twinkle, heartbeat, flash), staggered so nothing moves in sync. Off-screen layers pause to save battery; `prefers-reduced-motion` turns the motion off.
+- Hover a doodle with a mouse and it enlarges (1.8x); on touch screens, tap one to make it pop (2x). Change the size with `--hot` in `css/doodles.css`.
+- `css/fonts.css` + `fonts/`: Gelasio (a Georgia look-alike) and Archivo Black (for the title) are bundled as fallbacks so Android/Linux devices match iOS/desktop. They only download when the device lacks Georgia / Arial Black.

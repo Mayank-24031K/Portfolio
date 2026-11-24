@@ -1,0 +1,140 @@
+/*
+ * Background doodles — responsive sizing, ambient animation and hover/tap enlarge.
+ * Loaded last. Each <svg class="doodle d-KIND"> carries --l / --t (position %), --w (size px) and --r (tilt).
+ * Animations only use the individual `translate` / `rotate` properties (and path-level transforms),
+ * so `scale` stays free for the hover enlarge (.is-hot is toggled by js/doodles.js).
+ */
+:root { --ds: 1; }                       /* doodle size multiplier, lowered on small screens */
+
+.doodles { display: block !important; }  /* previously hidden on tablet / phone / <1700px */
+
+.doodle {
+    --sz: calc(var(--w, 50) * 1px * var(--ds, 1));
+    --dur: 7s;
+    --dl: 0s;
+    width: var(--sz);
+    /* keep every doodle fully inside its layer, whatever the screen width */
+    left: min(var(--l, 0%), calc(100% - var(--sz) - 4px));
+    top: min(var(--t, 0%), calc(100% - var(--sz) - 4px));
+    rotate: var(--r, 0deg);
+    scale: 1;
+    transform: none;
+    transform-origin: 50% 50%;
+    transition: scale .45s cubic-bezier(.34, 1.56, .64, 1), opacity .3s ease, filter .3s ease;
+    animation: dd-float var(--dur) ease-in-out var(--dl) infinite;
+    will-change: translate, rotate;
+}
+
+/* ---- Variety: stagger speeds and phases so nothing moves in unison ---- */
+.doodle:nth-child(3n+1) { --dur: 6.5s; --dl: -1.2s; }
+.doodle:nth-child(3n+2) { --dur: 8.5s; --dl: -3.6s; }
+.doodle:nth-child(3n)   { --dur: 10s;  --dl: -5.4s; }
+.doodle:nth-child(4n)   { animation-direction: alternate-reverse; }
+.doodle:nth-child(5n+2) { --dur: 7.4s; }
+
+/* ---- Per-shape motion ---- */
+.doodle.d-float { animation-name: dd-float; }
+.doodle.d-drift { animation-name: dd-drift; --dur: 14s; }                 /* clouds & arrows glide sideways */
+.doodle.d-sway  { animation-name: dd-sway;  --dur: 5.5s; }                /* waves / squiggles / zigzags */
+.doodle.d-spin  { animation: dd-spin calc(var(--dur) * 3) linear var(--dl) infinite; }  /* suns & sparkles */
+.doodle.d-twinkle { animation-name: dd-wobble; --dur: 4.5s; }
+.doodle.d-beat    { animation-name: dd-float; }
+.doodle.d-flash   { animation-name: dd-wobble; --dur: 3.2s; }
+
+.doodle.d-twinkle path,
+.doodle.d-beat path,
+.doodle.d-flash path {
+    transform-box: fill-box;
+    transform-origin: center;
+}
+.doodle.d-twinkle path { animation: dd-twinkle 2.6s ease-in-out var(--dl) infinite; }
+.doodle.d-beat path    { animation: dd-beat 1.8s ease-in-out var(--dl) infinite; }
+.doodle.d-flash path   { animation: dd-flash 3.4s steps(1, end) var(--dl) infinite; }
+
+@keyframes dd-float {
+    0%, 100% { translate: 0 0;      rotate: var(--r, 0deg); }
+    25%      { translate: 6px -12px; rotate: calc(var(--r, 0deg) + 5deg); }
+    50%      { translate: -4px -18px; rotate: calc(var(--r, 0deg) - 3deg); }
+    75%      { translate: -8px -6px; rotate: calc(var(--r, 0deg) + 4deg); }
+}
+@keyframes dd-drift {
+    0%, 100% { translate: -14px 0;  rotate: var(--r, 0deg); }
+    50%      { translate: 18px -8px; rotate: calc(var(--r, 0deg) + 4deg); }
+}
+@keyframes dd-sway {
+    0%, 100% { translate: -10px 0; rotate: calc(var(--r, 0deg) - 7deg); }
+    50%      { translate: 10px -6px; rotate: calc(var(--r, 0deg) + 7deg); }
+}
+@keyframes dd-spin {
+    from { rotate: var(--r, 0deg); }
+    to   { rotate: calc(var(--r, 0deg) + 360deg); }
+}
+@keyframes dd-wobble {
+    0%, 100% { rotate: calc(var(--r, 0deg) - 12deg); translate: 0 0; }
+    50%      { rotate: calc(var(--r, 0deg) + 12deg); translate: 0 -10px; }
+}
+@keyframes dd-twinkle {
+    0%, 100% { transform: scale(1);   opacity: 1; }
+    50%      { transform: scale(.72); opacity: .55; }
+}
+@keyframes dd-beat {
+    0%, 40%, 100% { transform: scale(1); }
+    15%           { transform: scale(1.18); }
+    28%           { transform: scale(.96); }
+}
+@keyframes dd-flash {
+    0%, 100% { opacity: 1; }
+    8%, 14%  { opacity: .2; }
+    11%      { opacity: 1; }
+}
+
+/* ---- Hover (mouse) / tap (touch): enlarge ---- */
+.doodle.is-hot {
+    scale: var(--hot, 1.8);
+    opacity: 1;
+    z-index: 3;
+    filter: drop-shadow(2px 3px 0 var(--color-accent-soft));
+}
+.doodle.b.is-hot { opacity: 1; }
+
+/* Pause off-screen layers (set by js/doodles.js) to save battery on phones */
+.doodles.is-paused .doodle,
+.doodles.is-paused .doodle path { animation-play-state: paused; }
+
+/* ---- Hero text must stay above the doodles when the hero collapses to a flow ---- */
+@media (max-width: 1024px) {
+    .hero__note { position: relative; left: auto; top: auto; z-index: 1; }
+    .hero > .scrap, .hero > .id-card, .hero > .sticker { z-index: 1; }
+}
+
+/* ---- Layer geometry + doodle scale per breakpoint ---- */
+@media (max-width: 999px) {
+    /* the right-edge spring is hidden here, so use the whole screen width */
+    .doodles { width: 100vw; margin-left: -50vw; overflow-x: clip; }
+}
+@media (max-width: 1099px) { :root { --ds: .85; } }
+@media (max-width: 860px)  { :root { --ds: .75; } }
+@media (max-width: 600px)  { :root { --ds: .6; } }
+@media (max-width: 380px)  { :root { --ds: .5; } }
+
+/* Section doodles (work / about) sit behind text below ~1700px: keep them as soft background */
+@media (max-width: 1699px) {
+    .work > .doodles .doodle,
+    .about > .doodles .doodle { opacity: .3; }
+    .work > .doodles .doodle.b,
+    .about > .doodles .doodle.b { opacity: .45; }
+    .work > .doodles .doodle.is-hot,
+    .about > .doodles .doodle.is-hot { opacity: 1; }
+}
+@media (max-width: 860px) {
+    .hero > .doodles .doodle { opacity: .45; }
+    .hero > .doodles .doodle.b { opacity: .7; }
+    .hero > .doodles .doodle.is-hot { opacity: 1; }
+    .doodle { --hot: 2; }               /* bigger pop on touch, the doodles are smaller there */
+}
+
+/* Respect reduced-motion: no ambient animation, hover still enlarges (gently) */
+@media (prefers-reduced-motion: reduce) {
+    .doodle, .doodle path { animation: none !important; }
+    .doodle { transition: scale .2s ease, opacity .2s ease; }
+}
