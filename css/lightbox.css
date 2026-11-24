@@ -1,0 +1,191 @@
+/*
+ * Lightbox: tapping the "Previous work" sketchboard opens it as a paper card
+ * (not full screen) so every detail stays readable. Tap the image inside to zoom in further.
+ */
+.scrap--interface[data-lightbox] { cursor: zoom-in; }
+.scrap--interface[data-lightbox]:focus-visible { outline: 2px dashed var(--color-accent); outline-offset: 6px; }
+
+.lb {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;               /* above loader/intro, below the sketched cursor */
+    display: grid;
+    place-items: center;
+    padding: 16px;
+    background: rgba(52, 54, 49, 0.38);
+    backdrop-filter: blur(2px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .25s ease, visibility 0s linear .25s;
+}
+.lb.is-open { opacity: 1; visibility: visible; transition: opacity .25s ease; }
+
+.lb__paper {
+    position: relative;
+    width: min(94vw, 1180px);
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 16px 16px 12px;
+    background: var(--color-paper);
+    border: 1.5px solid var(--color-ink);
+    border-radius: var(--sketch-radius, 3px);
+    box-shadow: 8px 10px 0 rgba(37, 99, 224, 0.28);
+    transform: translateY(14px) rotate(-2.5deg) scale(.9);
+    transition: transform .4s cubic-bezier(.34, 1.4, .64, 1);
+}
+.lb.is-open .lb__paper { transform: rotate(-.6deg); }
+
+.lb__paper::before {            /* tape */
+    content: "";
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    width: 84px;
+    height: 26px;
+    margin-left: -42px;
+    background: var(--color-accent-soft);
+    border: 1px dashed rgba(37, 99, 224, 0.5);
+    transform: rotate(-3deg);
+    z-index: 2;
+}
+
+.lb__view {
+    min-height: 0;
+    overflow: auto;
+    border: 1px solid rgba(52, 54, 49, 0.25);
+    border-radius: 2px;
+    background: #fff;
+    cursor: zoom-in;
+    -webkit-overflow-scrolling: touch;
+}
+.lb__view img {
+    display: block;
+    width: 100%;
+    max-height: calc(90vh - 92px);
+    object-fit: contain;
+    margin: 0 auto;
+    filter: none;
+    mix-blend-mode: normal;
+}
+.lb.is-zoomed .lb__view { cursor: zoom-out; }
+.lb.is-zoomed .lb__view img { width: 220%; max-width: none; max-height: none; }
+
+.lb__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    font-family: Georgia, "Gelasio", serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--color-muted);
+}
+
+.lb__close {
+    position: absolute;
+    top: -16px;
+    right: -12px;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    display: grid;
+    place-items: center;
+    font: 700 20px/1 Georgia, serif;
+    color: var(--color-paper);
+    background: var(--color-accent);
+    border: 1.5px solid var(--color-ink);
+    border-radius: 50%;
+    box-shadow: 2px 3px 0 rgba(52, 54, 49, .25);
+    cursor: pointer;
+    z-index: 3;
+}
+.lb__close:focus-visible { outline: 2px dashed var(--color-ink); outline-offset: 3px; }
+
+html.lb-lock { overflow: hidden; }
+
+@media (max-width: 600px) {
+    .lb { padding: 10px; }
+    .lb__paper { width: 96vw; padding: 12px 10px 10px; }
+    .lb__close { right: -4px; }
+    .lb__hint-long { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .lb, .lb__paper { transition: opacity .01s; }
+    .lb__paper, .lb.is-open .lb__paper { transform: none; }
+}
+
+/* ---- Hover: the sketchboard lifts and grows a little (keeps its tilt) ---- */
+.scrap--interface[data-lightbox] {
+    transition: transform .35s cubic-bezier(.34, 1.56, .64, 1), box-shadow .3s ease;
+}
+@media (hover: hover) and (pointer: fine) {
+    .scrap--interface[data-lightbox]:hover,
+    .scrap--interface[data-lightbox]:focus-visible {
+        transform: rotate(-11deg) scale(1.1);
+        box-shadow: 9px 11px 0 rgba(37, 99, 224, 0.28);
+        z-index: 8;
+    }
+}
+@media (hover: hover) and (pointer: fine) and (max-width: 1100px) {
+    .scrap--interface[data-lightbox]:hover,
+    .scrap--interface[data-lightbox]:focus-visible { transform: scale(1.06); }
+}
+.scrap--interface[data-lightbox]:active { transform: rotate(-11deg) scale(1.03); }
+@media (max-width: 1100px) { .scrap--interface[data-lightbox]:active { transform: scale(1.02); } }
+
+/* ---- Hand-drawn "click to check" arrow ---- */
+.lb-hint {
+    position: absolute;
+    left: 100%;
+    bottom: -34px;
+    margin-left: 10px;
+    display: flex;
+    align-items: flex-start;
+    gap: 2px;
+    pointer-events: none;
+    color: var(--color-accent);
+    transform: rotate(11deg);        /* cancels the figure's tilt so the note reads upright */
+    transform-origin: left bottom;
+    white-space: nowrap;
+    z-index: 3;
+}
+.lb-hint__text {
+    margin-top: 28px;
+    font: italic 700 17px/1 Georgia, "Gelasio", serif;
+    letter-spacing: .01em;
+    animation: lb-nudge 2.2s ease-in-out infinite;
+}
+.lb-hint__text .t { display: none; }
+@media (hover: none) { .lb-hint__text .c { display: none; } .lb-hint__text .t { display: inline; } }
+
+.lb-hint svg { width: 64px; height: 56px; overflow: visible; flex: none; animation: lb-nudge 2.2s ease-in-out infinite; }
+.lb-hint svg path {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+.lb-hint .lb-curve { stroke-dasharray: 90; stroke-dashoffset: 90; animation: lb-draw 3.2s ease-in-out infinite; }
+.lb-hint .lb-head  { stroke-dasharray: 40; stroke-dashoffset: 40; animation: lb-head 3.2s ease-in-out infinite; }
+
+@keyframes lb-draw { 0% { stroke-dashoffset: 90; } 35%, 85% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: -90; } }
+@keyframes lb-head { 0%, 30% { stroke-dashoffset: 40; } 45%, 85% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: -40; } }
+@keyframes lb-nudge { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(-5px, 4px); } }
+
+.scrap--interface[data-lightbox]:hover .lb-hint,
+.lb-open-seen .lb-hint { opacity: 0; transition: opacity .2s ease; }
+.lb-hint { transition: opacity .3s ease; }
+
+/* Stacked layouts: put the note under the image, no tilt to cancel */
+@media (max-width: 1100px) {
+    .lb-hint { left: auto; right: 6px; bottom: -46px; margin: 0; transform: none; }
+    .scrap--interface[data-lightbox] { margin-bottom: 52px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .lb-hint *, .lb-hint { animation: none !important; }
+    .lb-hint .lb-curve, .lb-hint .lb-head { stroke-dashoffset: 0; }
+}

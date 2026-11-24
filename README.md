@@ -30,3 +30,7 @@ To test, open the page in browser developer tools and check widths around 320, 3
 - Every doodle is animated (float, drift, sway, spin, twinkle, heartbeat, flash), staggered so nothing moves in sync. Off-screen layers pause to save battery; `prefers-reduced-motion` turns the motion off.
 - Hover a doodle with a mouse and it enlarges (1.8x); on touch screens, tap one to make it pop (2x). Change the size with `--hot` in `css/doodles.css`.
 - `css/fonts.css` + `fonts/`: Gelasio (a Georgia look-alike) and Archivo Black (for the title) are bundled as fallbacks so Android/Linux devices match iOS/desktop. They only download when the device lacks Georgia / Arial Black.
+
+## Lightbox
+
+`css/lightbox.css` + `js/lightbox.js`: the thumbnail grows slightly on hover and has an animated "click to check" arrow (hidden after first open). Tap/click the "Previous work" sketchboard in the hero and it opens as a paper card (not full screen) so all details are readable. Tap the image inside to zoom further (scrolls), and close with ✕, Esc or a tap outside.
